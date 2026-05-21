@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlmodel import Field, SQLModel, create_engine, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -14,6 +15,13 @@ async_session = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncS
 
 app = FastAPI(title="Control de Inventario de Joyería - SQLModel")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class JewelryItem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
